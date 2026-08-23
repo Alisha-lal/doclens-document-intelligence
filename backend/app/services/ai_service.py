@@ -1,5 +1,6 @@
 import json
 import logging
+import time
 from abc import ABC, abstractmethod
 
 from google.genai import errors
@@ -80,6 +81,9 @@ class GeminiProvider(AIProvider):
 
         We intentionally avoid multiple long retries because they
         add significant latency to document analysis.
+
+        Timing information is logged so we can identify whether
+        Gemini is the main source of latency.
         """
 
         models = [self.model]
@@ -91,23 +95,41 @@ class GeminiProvider(AIProvider):
 
         for index, model in enumerate(models):
 
-            try:
-                logger.info("Sending Gemini request using model: %s", model)
+            start_time = time.perf_counter()
 
-                return self.client.models.generate_content(
+            try:
+                logger.info(
+                    "⏱ Gemini request started | model=%s",
+                    model,
+                )
+
+                response = self.client.models.generate_content(
                     model=model,
                     contents=contents,
                     config=config,
                 )
 
+                elapsed = time.perf_counter() - start_time
+
+                logger.info(
+                    "⏱ Gemini request finished | model=%s | time=%.2f seconds",
+                    model,
+                    elapsed,
+                )
+
+                return response
+
             except errors.APIError as exc:
+                elapsed = time.perf_counter() - start_time
+
                 last_error = exc
                 status = getattr(exc, "code", None)
 
                 logger.warning(
-                    "Gemini model %s failed with status %s.",
+                    "Gemini request failed | model=%s | status=%s | time=%.2f seconds",
                     model,
                     status,
+                    elapsed,
                 )
 
                 # Non-retryable errors should immediately stop.
