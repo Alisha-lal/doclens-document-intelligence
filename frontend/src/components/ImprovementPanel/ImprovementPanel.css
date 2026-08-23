@@ -1,0 +1,25 @@
+@import "../../styles/panel.css";
+
+.improvement-panel__disclaimer {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 14px;
+  margin-top: -8px;
+}
+
+.improvement-panel__list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.improvement-panel__list li {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink);
+}

@@ -1,0 +1,149 @@
+.app-header {
+  background: var(--header-bg);
+  color: var(--header-text);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.app-header__inner {
+  width: 100%;
+  min-height: 108px;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 18px 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+}
+
+.app-header__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 2px;
+
+  border: 0;
+  padding: 0;
+  margin: 0;
+
+  background: transparent;
+  color: var(--header-text);
+
+  cursor: pointer;
+}
+
+.lens-mark {
+  color: #dce8f7;
+  margin-bottom: 2px;
+
+  transition: transform 180ms ease;
+}
+
+.app-header__brand:hover .lens-mark {
+  transform: translateY(-1px);
+}
+
+.app-header__name {
+  font-family: var(--font-display);
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.app-header__tagline {
+  margin-top: 4px;
+
+  font-family: "Source Sans 3", "Segoe UI", Arial, sans-serif !important;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+
+  color: #aebbd0;
+}
+
+.app-header__action {
+  position: absolute;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+
+  padding: 10px 16px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.app-header__action:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 700px) {
+  .app-header__inner {
+    min-height: 96px;
+    padding: 16px 24px;
+  }
+
+  .app-header__action {
+    right: 24px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 560px) {
+  .app-header__inner {
+    min-height: 94px;
+    padding: 14px 18px;
+  }
+
+  .app-header__name {
+    font-size: 22px;
+  }
+
+  .app-header__tagline {
+    margin-top: 4px;
+
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+
+    color: #aebbd0;
+}
+
+  .app-header__action {
+    position: static;
+    transform: none;
+
+    margin-top: 10px;
+
+    font-size: 12px;
+  }
+
+  .app-header__inner {
+    flex-direction: column;
+  }
+}

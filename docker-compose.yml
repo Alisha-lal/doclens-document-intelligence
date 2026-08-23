@@ -1,0 +1,15 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.0-flash}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
+      MAX_FILE_SIZE_MB: ${MAX_FILE_SIZE_MB:-15}
+
+# The frontend is not containerized (see README > Engineering Trade-offs).
+# Run it locally with `npm run dev` inside ./frontend, pointing
+# VITE_API_URL at this backend (http://localhost:8000 by default).

@@ -1,0 +1,345 @@
+.processing-steps {
+  list-style: none;
+
+  margin: 0;
+  padding: 0;
+
+  width: 100%;
+  max-width: 620px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+
+/* =========================================
+   STEP CELL
+========================================= */
+
+.processing-step {
+  width: 100%;
+
+  padding: 16px 18px 13px;
+
+  background: #ffffff;
+
+  border: 1px solid #dce3ec;
+
+  border-radius: 12px;
+
+  box-shadow: 0 2px 7px rgba(23, 32, 51, 0.04);
+
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.2s ease;
+}
+
+
+/* =========================================
+   STEP CONTENT
+========================================= */
+
+.processing-step__content {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  min-height: 28px;
+}
+
+
+/* =========================================
+   MARKER
+========================================= */
+
+.processing-step__marker {
+  width: 28px;
+  height: 28px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  border: 1px solid #d3dce8;
+
+  background: #f4f7fa;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: transparent;
+
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+
+.processing-step__dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #aab6c6;
+
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease;
+}
+
+
+/* =========================================
+   LABEL
+========================================= */
+
+.processing-step__label {
+  flex: 1;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  line-height: 1.4;
+
+  color: #172033;
+
+  text-align: left;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.processing-step__status {
+  font-family: var(--font-body);
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  color: #718096;
+
+  letter-spacing: 0;
+
+  text-transform: none;
+
+  white-space: nowrap;
+}
+
+
+.processing-step--done .processing-step__status {
+  color: #3568ad;
+}
+
+
+.processing-step--current .processing-step__status {
+  color: #3568ad;
+
+  font-weight: 600;
+}
+
+
+/* =========================================
+   PROGRESS TRACK
+========================================= */
+
+.processing-step__track {
+  width: 100%;
+
+  height: 4px;
+
+  margin-top: 13px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: #edf1f5;
+}
+
+
+.processing-step__fill {
+  width: 0%;
+
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: #3568ad;
+
+  transition: width 0.5s ease;
+}
+
+
+/* =========================================
+   CURRENT
+========================================= */
+
+.processing-step--current {
+  border-color: #6d94c7;
+
+  box-shadow:
+    0 4px 14px rgba(53, 104, 173, 0.10);
+}
+
+
+.processing-step--current .processing-step__marker {
+  border-color: #3568ad;
+
+  background: #eef4fb;
+}
+
+
+.processing-step--current .processing-step__dot {
+  background: #3568ad;
+
+  animation: pulse-dot 1.4s ease-in-out infinite;
+}
+
+
+.processing-step--current .processing-step__fill {
+  animation: progress-fill 2.2s ease-in-out infinite;
+}
+
+
+/* =========================================
+   COMPLETED
+========================================= */
+
+.processing-step--done {
+  border-color: #d2dce9;
+
+  background: #f8fafc;
+}
+
+
+.processing-step--done .processing-step__marker {
+  border-color: #3568ad;
+
+  background: #3568ad;
+
+  color: #ffffff;
+}
+
+
+.processing-step--done .processing-step__fill {
+  width: 100%;
+}
+
+
+/* =========================================
+   PENDING
+========================================= */
+
+.processing-step--pending {
+  opacity: 0.65;
+}
+
+
+.processing-step--pending .processing-step__fill {
+  width: 0%;
+}
+
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.35);
+    opacity: 0.65;
+  }
+}
+
+
+@keyframes progress-fill {
+  0% {
+    width: 10%;
+  }
+
+  50% {
+    width: 72%;
+  }
+
+  100% {
+    width: 25%;
+  }
+}
+
+
+/* =========================================
+   HOVER
+========================================= */
+
+.processing-step--pending:hover {
+  opacity: 1;
+
+  border-color: #b8c8dd;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .processing-steps {
+    gap: 10px;
+  }
+
+  .processing-step {
+    padding: 14px 14px 12px;
+  }
+
+  .processing-step__label {
+    font-size: 14px;
+  }
+
+  .processing-step__status {
+    font-size: 12px;
+  }
+
+  .processing-step__marker {
+    width: 26px;
+    height: 26px;
+  }
+
+}
+
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .processing-step--current .processing-step__dot,
+  .processing-step--current .processing-step__fill {
+    animation: none;
+  }
+
+  .processing-step__fill {
+    transition: none;
+  }
+
+}

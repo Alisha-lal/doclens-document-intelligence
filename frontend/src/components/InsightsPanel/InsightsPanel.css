@@ -1,0 +1,69 @@
+@import "../../styles/panel.css";
+
+.insights-panel__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.insight-card {
+  display: flex;
+  gap: 10px;
+  padding: 14px;
+  background: var(--surface-alt);
+  border-radius: var(--radius-md);
+  align-items: flex-start;
+}
+
+.insight-card__icon {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--accent-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.insight-card__label {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--ink-faint);
+  margin-bottom: 4px;
+}
+
+.insight-card__text {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.insights-panel__points {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.insights-panel__list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.insights-panel__list li {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+@media (max-width: 640px) {
+  .insights-panel__grid {
+    grid-template-columns: 1fr;
+  }
+}

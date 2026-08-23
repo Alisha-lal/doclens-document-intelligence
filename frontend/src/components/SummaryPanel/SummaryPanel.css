@@ -1,0 +1,187 @@
+.summary-panel {
+  width: 100%;
+
+  background: #ffffff;
+
+  border: 1px solid #dce3ec;
+  border-radius: 14px;
+
+  padding: 28px 30px;
+
+  box-shadow: 0 2px 8px rgba(23, 32, 51, 0.04);
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.summary-panel__header {
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 24px;
+
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid #e5e9ef;
+}
+
+
+.summary-panel__eyebrow {
+  margin: 0 0 5px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  color: #7d8999;
+
+  letter-spacing: 0.04em;
+
+  text-transform: uppercase;
+}
+
+
+.summary-panel__title {
+  margin: 0;
+
+  font-size: 24px;
+
+  line-height: 1.25;
+
+  font-weight: 700;
+
+  letter-spacing: -0.015em;
+
+  color: #172033;
+}
+
+
+/* =========================================
+   SUMMARY LENGTH TABS
+========================================= */
+
+.summary-panel__tabs {
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  padding: 4px;
+
+  background: #f1f4f7;
+
+  border: 1px solid #e1e6ec;
+
+  border-radius: 9px;
+
+  flex-shrink: 0;
+}
+
+
+.summary-panel__tab {
+  border: none;
+
+  background: transparent;
+
+  padding: 7px 14px;
+
+  border-radius: 6px;
+
+  font-family: var(--font-body);
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  color: #718096;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+
+.summary-panel__tab:hover {
+  color: #172033;
+}
+
+
+.summary-panel__tab--active {
+  background: #ffffff;
+
+  color: #3568ad;
+
+  font-weight: 600;
+
+  box-shadow: 0 1px 3px rgba(23, 32, 51, 0.08);
+}
+
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.summary-panel__content {
+  padding-top: 24px;
+}
+
+
+.summary-panel__text {
+  margin: 0;
+
+  max-width: 900px;
+
+  font-size: 16px;
+
+  line-height: 1.8;
+
+  color: #303b4c;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+  .summary-panel {
+    padding: 22px 20px;
+  }
+
+  .summary-panel__header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 16px;
+  }
+
+  .summary-panel__tabs {
+    width: 100%;
+  }
+
+  .summary-panel__tab {
+    flex: 1;
+
+    padding: 8px 10px;
+  }
+
+  .summary-panel__title {
+    font-size: 22px;
+  }
+
+  .summary-panel__text {
+    font-size: 15px;
+
+    line-height: 1.7;
+  }
+}

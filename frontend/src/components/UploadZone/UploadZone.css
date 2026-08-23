@@ -1,0 +1,360 @@
+/* =========================================
+   UPLOAD ZONE WRAPPER
+========================================= */
+
+.upload-zone-wrap {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 12px;
+}
+
+
+/* =========================================
+   MAIN UPLOAD BOX
+========================================= */
+
+.upload-zone {
+  position: relative;
+
+  width: 100%;
+  max-width: 760px;
+  min-height: 300px;
+
+  padding: 48px 28px;
+
+  border-radius: var(--radius-lg);
+
+  background: #ffffff;
+
+  border: 1.5px dashed #b9c5d6;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+
+/* =========================================
+   HOVER STATE
+========================================= */
+
+.upload-zone:hover {
+  border-color: #3568ad;
+
+  background: #f8fbff;
+
+  box-shadow:
+    0 0 0 3px rgba(53, 104, 173, 0.08),
+    0 10px 28px rgba(53, 104, 173, 0.08);
+}
+
+
+/* =========================================
+   CLICK STATE
+========================================= */
+
+.upload-zone:active {
+  transform: scale(0.997);
+}
+
+
+/* =========================================
+   DRAG & DROP STATE
+========================================= */
+
+.upload-zone--active {
+  border-color: #3568ad;
+
+  border-style: solid;
+
+  background: #f3f8ff;
+
+  box-shadow:
+    0 0 0 4px rgba(53, 104, 173, 0.12),
+    0 12px 32px rgba(53, 104, 173, 0.10);
+}
+
+
+/* =========================================
+   VIEWFINDER CORNERS
+========================================= */
+
+.upload-zone__corner {
+  position: absolute;
+
+  width: 30px;
+  height: 30px;
+
+  border: 2px solid #c7d1df;
+
+  opacity: 0.75;
+
+  transition:
+    border-color 0.2s ease,
+    opacity 0.2s ease,
+    width 0.2s ease,
+    height 0.2s ease;
+}
+
+
+/* Top-left */
+
+.upload-zone__corner--tl {
+  top: 17px;
+  left: 17px;
+
+  border-right: none;
+  border-bottom: none;
+
+  border-top-left-radius: 5px;
+}
+
+
+/* Top-right */
+
+.upload-zone__corner--tr {
+  top: 17px;
+  right: 17px;
+
+  border-left: none;
+  border-bottom: none;
+
+  border-top-right-radius: 5px;
+}
+
+
+/* Bottom-left */
+
+.upload-zone__corner--bl {
+  bottom: 17px;
+  left: 17px;
+
+  border-right: none;
+  border-top: none;
+
+  border-bottom-left-radius: 5px;
+}
+
+
+/* Bottom-right */
+
+.upload-zone__corner--br {
+  bottom: 17px;
+  right: 17px;
+
+  border-left: none;
+  border-top: none;
+
+  border-bottom-right-radius: 5px;
+}
+
+
+/* Corners react to hover */
+
+.upload-zone:hover .upload-zone__corner,
+.upload-zone--active .upload-zone__corner {
+  border-color: #3568ad;
+
+  opacity: 1;
+}
+
+
+/* =========================================
+   UPLOAD ICON
+========================================= */
+
+.upload-zone__icon {
+  color: #3568ad;
+
+  margin-bottom: 7px;
+
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
+}
+
+
+.upload-zone:hover .upload-zone__icon {
+  transform: translateY(-3px);
+}
+
+
+.upload-zone--active .upload-zone__icon {
+  transform: translateY(-3px);
+}
+
+
+/* =========================================
+   UPLOAD TITLE
+========================================= */
+
+.upload-zone__title {
+  margin: 0;
+
+  font-family: var(--font-display);
+
+  font-size: 18px;
+  line-height: 1.4;
+
+  font-weight: 600;
+
+  color: var(--ink);
+}
+
+
+/* =========================================
+   UPLOAD SUBTITLE
+========================================= */
+
+.upload-zone__subtitle {
+  margin: 0;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+
+  color: var(--ink-soft);
+}
+
+
+/* =========================================
+   FILE TYPE / SIZE INFORMATION
+========================================= */
+
+.upload-zone__hint {
+  margin: 10px 0 0;
+
+  font-family: var(--font-mono);
+
+  font-size: 11px;
+
+  line-height: 1.5;
+
+  color: var(--ink-faint);
+
+  letter-spacing: 0.02em;
+}
+
+
+/* =========================================
+   ERROR MESSAGE
+========================================= */
+
+.upload-zone__error {
+  max-width: 760px;
+
+  margin: 0;
+
+  padding: 10px 16px;
+
+  border-radius: var(--radius-md);
+
+  color: var(--danger);
+
+  background: var(--danger-soft);
+
+  font-size: 13.5px;
+
+  font-weight: 500;
+
+  text-align: center;
+}
+
+
+/* =========================================
+   MOBILE / TABLET
+========================================= */
+
+@media (max-width: 700px) {
+
+  .upload-zone {
+    min-height: 280px;
+
+    padding: 42px 22px;
+  }
+
+  .upload-zone__title {
+    font-size: 17px;
+  }
+
+  .upload-zone__subtitle {
+    font-size: 14px;
+  }
+
+  .upload-zone__hint {
+    font-size: 10.5px;
+  }
+
+  .upload-zone__corner {
+    width: 27px;
+    height: 27px;
+  }
+
+  .upload-zone__corner--tl {
+    top: 15px;
+    left: 15px;
+  }
+
+  .upload-zone__corner--tr {
+    top: 15px;
+    right: 15px;
+  }
+
+  .upload-zone__corner--bl {
+    bottom: 15px;
+    left: 15px;
+  }
+
+  .upload-zone__corner--br {
+    bottom: 15px;
+    right: 15px;
+  }
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+  .upload-zone {
+    min-height: 250px;
+
+    padding: 36px 18px;
+  }
+
+  .upload-zone__title {
+    font-size: 16px;
+  }
+
+  .upload-zone__subtitle {
+    font-size: 13.5px;
+  }
+
+  .upload-zone__hint {
+    font-size: 10px;
+
+    letter-spacing: 0.01em;
+  }
+
+  .upload-zone__corner {
+    width: 24px;
+    height: 24px;
+  }
+}

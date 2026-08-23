@@ -1,0 +1,32 @@
+@import "../../styles/panel.css";
+
+.topics-panel__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 13px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pill--topic {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.pill--entity {
+  background: var(--highlight-soft);
+  color: var(--highlight);
+}
+
+.topics-panel__entities {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}

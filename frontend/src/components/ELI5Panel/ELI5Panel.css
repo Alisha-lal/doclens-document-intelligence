@@ -1,0 +1,42 @@
+@import "../../styles/panel.css";
+
+.eli5-panel__intro {
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin-bottom: 14px;
+}
+
+.eli5-panel__button {
+  border: 1px solid var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  padding: 9px 18px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.eli5-panel__button:hover {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.eli5-panel__status {
+  font-size: 13.5px;
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+.eli5-panel__error {
+  color: var(--danger);
+  font-size: 13.5px;
+}
+
+.eli5-panel__text {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--ink);
+  white-space: pre-wrap;
+}
