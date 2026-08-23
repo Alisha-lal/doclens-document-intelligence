@@ -1,6 +1,11 @@
 # DocLens
 
 **Understand any document in seconds.**
+# DocLens — Document Intelligence
+
+## Live Application
+
+https://doclens-document-intelligence.vercel.app
 
 An AI document intelligence assistant: upload a PDF, scan, or photo, and
 DocLens extracts the text, generates grounded summaries, surfaces key
