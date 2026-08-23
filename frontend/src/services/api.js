@@ -1,10 +1,11 @@
 /**
- * Centralized API client. Every backend call goes through here so
- * components never construct fetch requests directly.
+ * Centralized API client.
+ * Every backend call goes through here so components never
+ * construct fetch requests directly.
  */
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+// Render backend URL
+const API_BASE_URL = "https://doclens-backend-721e.onrender.com";
 
 
 class ApiError extends Error {
