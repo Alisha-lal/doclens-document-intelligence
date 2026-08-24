@@ -1,0 +1,7 @@
+DocLens was built with a clear separation between deterministic processing and AI-driven analysis. Uploads are validated and parsed with PyMuPDF for digital text, with Tesseract OCR as an automatic fallback for scanned documents — ensuring the system handles both content types without manual intervention. Basic statistics (page count, word count, reading time) are computed locally rather than delegated to the LLM, keeping those results fast, deterministic, and cost-free.
+
+For AI analysis, extracted text is sent to Gemini with a structured prompt, and responses are validated against Pydantic schemas to guarantee consistent, parseable output rather than relying on free-form text.
+
+Document Q&A uses a lightweight retrieval step: the document is chunked with overlap, relevant chunks are selected lexically, and only that grounded context is passed to Gemini — with explicit instructions to treat the document as untrusted data and answer solely from provided context. This reduces hallucination risk and avoids the cost/complexity of a full vector database for an MVP.
+
+The stack (React/Vite frontend, FastAPI backend, Dockerized with Tesseract) was chosen for fast iteration and reproducible deployment, with Vercel/Render handling hosting — prioritizing pragmatic, production-appropriate trade-offs over premature optimization.
