@@ -7,6 +7,9 @@
 // Render backend URL
 const API_BASE_URL = "https://doclens-backend-721e.onrender.com";
 
+const ANALYZE_POLL_INTERVAL_MS = 2000;
+const ANALYZE_MAX_POLL_ATTEMPTS = 90; // 90 * 2s = 3 minutes max wait
+
 
 class ApiError extends Error {
   constructor(message, status) {
@@ -14,6 +17,11 @@ class ApiError extends Error {
     this.name = "ApiError";
     this.status = status;
   }
+}
+
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 
@@ -56,16 +64,44 @@ async function request(path, options = {}) {
 
 /**
  * Analyze an uploaded document.
+ *
+ * The backend runs OCR + the AI call in the background to avoid long-held
+ * requests that can exceed Render's proxy timeout. This function starts
+ * the job, then polls until it's done.
+ *
+ * @param {File} file
+ * @param {(status: "pending" | "processing") => void} [onStatus] - optional
+ *   callback fired whenever the job's status updates, useful for showing
+ *   a "Analyzing document..." message in the UI.
  */
-export function analyzeDocument(file) {
+export async function analyzeDocument(file, onStatus) {
   const formData = new FormData();
 
   formData.append("file", file);
 
-  return request("/api/documents/analyze", {
+  const { job_id } = await request("/api/documents/analyze", {
     method: "POST",
     body: formData,
   });
+
+  onStatus?.("pending");
+
+  for (let attempt = 0; attempt < ANALYZE_MAX_POLL_ATTEMPTS; attempt++) {
+    await sleep(ANALYZE_POLL_INTERVAL_MS);
+
+    const statusData = await request(`/api/documents/analyze/status/${job_id}`);
+
+    if (statusData.status === "done") {
+      return statusData.result;
+    }
+
+    onStatus?.(statusData.status);
+  }
+
+  throw new ApiError(
+    "Document analysis is taking longer than expected. Please try again.",
+    408
+  );
 }
 
 
