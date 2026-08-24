@@ -2,54 +2,81 @@
 
 **Understand any document in seconds.**
 
-## DocLens — Document Intelligence
+## DocLens — Document Intelligence Assistant
 
-### Live Application
+DocLens is an AI-powered document intelligence assistant that lets users upload PDFs and images, extract their content, generate grounded summaries, identify key insights and topics, and ask questions about the uploaded document.
 
+The application supports both digitally generated documents and scanned/image-based documents through PDF text extraction and OCR.
+
+> **MVP scope:** DocLens was intentionally designed as a focused document-understanding MVP with an emphasis on clean architecture, grounded AI responses, reliable document processing, responsive UX, and practical engineering trade-offs.
+
+---
+
+## Live Application
+
+**Frontend:**  
 https://doclens-document-intelligence.vercel.app
 
-### GitHub Repository
+**Backend API:**  
+https://doclens-backend-721e.onrender.com
+
+**API Documentation:**  
+https://doclens-backend-721e.onrender.com/docs
+
+## GitHub Repository
 
 https://github.com/Alisha-lal/doclens-document-intelligence
 
 ---
 
-## Overview
+# Overview
 
-DocLens is an AI-powered document intelligence assistant that allows users to upload PDF files and images, extract their content, generate grounded summaries, identify key insights and topics, and ask questions about the uploaded document.
+DocLens provides a unified workflow for turning uploaded documents into structured, understandable information.
 
-The application supports both digitally generated documents and scanned/image-based documents through a combination of PDF text extraction and OCR.
-
-The system is designed as a focused MVP with an emphasis on clean architecture, reliable document processing, grounded AI responses, responsive UI, and practical engineering trade-offs.
-
----
-
-## Problem
-
-Reading and understanding long documents such as research papers, reports, contracts, forms, and scanned documents can be time-consuming.
-
-Traditional document processing tools may work well with machine-readable PDFs but often require separate OCR workflows for scanned documents and images.
-
-There is a need for a lightweight application that can accept different document formats and quickly provide an understandable, structured representation of their content.
-
----
-
-## Solution
-
-DocLens provides a unified document-processing workflow.
-
-Users can upload a PDF or image, after which the application:
+Users can upload a PDF or image, after which DocLens:
 
 1. Validates the uploaded file.
 2. Extracts text from digital PDFs using PyMuPDF.
-3. Automatically uses OCR when a PDF page contains insufficient machine-readable text.
-4. Uses Tesseract OCR for standalone images.
+3. Detects pages that require OCR.
+4. Uses Tesseract OCR for scanned PDF pages and standalone images.
 5. Calculates document statistics locally.
-6. Sends the extracted document content to Gemini for structured analysis.
+6. Sends extracted content to Gemini for structured analysis.
 7. Validates the AI response using Pydantic.
-8. Displays summaries, key points, insights, topics, entities, and suggestions.
+8. Displays summaries, insights, key points, topics, entities, and improvement suggestions.
 9. Allows users to ask questions about the document.
 10. Provides an Explain Simply feature for plain-language explanations.
+
+---
+
+# Problem
+
+Reading and understanding long documents such as research papers, reports, contracts, forms, and scanned documents can be time-consuming.
+
+Traditional document-processing tools may work well with machine-readable PDFs but often require separate OCR workflows for scanned documents and images.
+
+DocLens addresses this by providing a lightweight workflow that accepts different document formats and produces an understandable, structured representation of the document's content.
+
+---
+
+# Solution
+
+DocLens combines deterministic document processing with AI-powered understanding.
+
+The application first extracts and normalizes the document content. It then computes basic statistics locally and sends the extracted text to Gemini for structured analysis.
+
+The resulting analysis includes:
+
+- Short, medium, and long summaries
+- Key points
+- Main ideas
+- Key insights
+- Topics
+- Important entities
+- Improvement suggestions
+
+Users can also ask questions about the document. The backend performs lightweight lexical retrieval to select relevant document sections before sending grounded context to Gemini.
+
+The AI is instructed to treat uploaded document content as untrusted data and to answer document questions only from the supplied context.
 
 ---
 
@@ -69,7 +96,7 @@ Users can upload a PDF or image, after which the application:
 ## Text Extraction
 
 - PDF text extraction using PyMuPDF
-- Reading-order-aware text reconstruction
+- Reading-order-aware PDF extraction
 - Per-page extraction
 - Automatic detection of pages requiring OCR
 - OCR fallback for scanned PDFs
@@ -81,14 +108,14 @@ Users can upload a PDF or image, after which the application:
 
 ## Document Statistics
 
-DocLens calculates document statistics locally, including:
+DocLens calculates document statistics locally:
 
 - Page count
 - Word count
 - Character count
 - Estimated reading time
 
-These values are calculated by the application rather than generated by the AI.
+These values are calculated by the application rather than generated by the AI model.
 
 ## AI Summarization
 
@@ -106,7 +133,7 @@ DocLens generates:
 
 ## Key Insights
 
-The AI analysis provides structured insight cards covering:
+The analysis provides structured insight cards covering:
 
 - Main objective
 - Major finding
@@ -117,9 +144,14 @@ The AI analysis provides structured insight cards covering:
 
 Users can ask questions about an uploaded document.
 
-The system uses lightweight lexical retrieval to identify relevant document sections before sending those sections to Gemini.
+The system:
 
-The AI is instructed to answer using only the supplied document context.
+1. Splits the extracted document into chunks.
+2. Uses lightweight lexical retrieval to identify relevant chunks.
+3. Sends the selected document context to Gemini.
+4. Instructs Gemini to answer using only the supplied document context.
+
+This keeps the MVP grounded without introducing vector-database infrastructure.
 
 ## Explain Simply
 
@@ -130,9 +162,8 @@ The Explain Simply feature generates a plain-language explanation of the uploade
 - Responsive UI
 - Drag-and-drop interaction
 - File picker support
-- Loading states
-- Processing states
-- Error handling
+- Loading and processing states
+- Friendly error handling
 - Clear result presentation
 - Mobile-friendly interface
 - Accessible interface elements
@@ -145,62 +176,76 @@ This allows the application to be tested without requiring a real AI API key.
 
 ---
 
-# Architecture
+# Screenshots
 
-```text
-                  ┌──────────────────────┐
-                  │      React UI        │
-                  │        Vite          │
-                  └──────────┬───────────┘
-                             │
-                             │ HTTP / JSON
-                             ▼
-                  ┌──────────────────────┐
-                  │       FastAPI        │
-                  │        API           │
-                  └──────────┬───────────┘
-                             │
-              ┌──────────────┼──────────────┐
-              ▼              ▼              ▼
-       ┌────────────┐ ┌────────────┐ ┌─────────────┐
-       │  PyMuPDF   │ │ Tesseract  │ │   Gemini    │
-       │ PDF Parser │ │    OCR     │ │     AI      │
-       └────────────┘ └────────────┘ └─────────────┘
-```
+## Landing Page
+
+![DocLens Landing Page](screenshots/home.png)
+
+## Document Upload
+
+![Document Upload](screenshots/file-upload.png)
+
+After selecting a document, DocLens displays a confirmation screen before analysis:
+
+![Ready to Analyze](screenshots/ready-to-analyze.png)
+
+## Document Analysis Dashboard
+
+![Document Overview](screenshots/overview.png)
+
+### AI Summary
+
+![Document Summary](screenshots/summary.png)
+
+### Key Insights
+
+![Key Insights](screenshots/insights.png)
+
+### Key Points
+
+![Key Points](screenshots/key-points.png)
+
+### Topics and Entities
+
+![Topics and Entities](screenshots/topics-entities.png)
+
+### Ask Your Document
+
+![Ask Your Document](screenshots/ask-document.png)
+
+### Explain Simply
+
+![Explain Simply](screenshots/explain-simply.png)
+
+### Improvement Suggestions
+
+![Document Improvement Suggestions](screenshots/improvements.png)
 
 ---
 
-# Deployment Architecture
+# Architecture
 
 ```text
-┌──────────────────────────────┐
-│            Vercel            │
-│       React + Vite Frontend  │
-└──────────────┬───────────────┘
-               │
-               │ HTTPS API Requests
-               ▼
-┌──────────────────────────────┐
-│            Render            │
-│     FastAPI + Docker Backend │
-└──────────────┬───────────────┘
-               │
-               ▼
-┌──────────────────────────────┐
-│         Gemini API           │
-│        AI Processing         │
-└──────────────────────────────┘
+                         ┌──────────────────────┐
+                         │      React UI        │
+                         │        Vite          │
+                         └──────────┬───────────┘
+                                    │
+                                    │ HTTPS / JSON
+                                    ▼
+                         ┌──────────────────────┐
+                         │       FastAPI        │
+                         │         API          │
+                         └──────────┬───────────┘
+                                    │
+                 ┌──────────────────┼──────────────────┐
+                 ▼                  ▼                  ▼
+        ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
+        │    PyMuPDF     │ │   Tesseract    │ │     Gemini     │
+        │   PDF Parser   │ │      OCR       │ │       AI       │
+        └────────────────┘ └────────────────┘ └────────────────┘
 ```
-
-### Production URLs
-
-**Frontend:**
-
-https://doclens-document-intelligence.vercel.app
-
-**Backend:**
-
-https://doclens-backend-721e.onrender.com
 
 ---
 
@@ -209,22 +254,22 @@ https://doclens-backend-721e.onrender.com
 ```text
 Upload
   ↓
-File validation
+Validation
   ↓
-PDF extraction / Image OCR
+PDF Text Extraction / OCR
   ↓
-Text normalization
+Text Normalization
   ↓
-Document statistics
+Local Document Statistics
   ↓
-Structured Gemini analysis
+Structured Gemini Analysis
   ↓
-Pydantic validation
+Pydantic Validation
   ↓
-Frontend dashboard
+Frontend Dashboard
+  ↓
+Ask Document / Explain Simply
 ```
-
-Follow-up actions such as **Ask Document** and **Explain Simply** reuse the already-extracted document text through the backend's temporary in-memory document store.
 
 ---
 
@@ -254,7 +299,7 @@ Follow-up actions such as **Ask Document** and **Explain Simply** reuse the alre
 
 ## AI
 
-- Gemini 3.5 Flash Lite
+- Gemini
 - Official `google-genai` Python SDK
 - Pydantic structured output
 
@@ -277,11 +322,11 @@ Follow-up actions such as **Ask Document** and **Explain Simply** reuse the alre
 
 ## React
 
-React provides a component-based architecture suitable for a stateful document-processing interface and dashboard.
+React provides a component-based architecture suitable for a stateful document-processing interface and analysis dashboard.
 
 ## Vite
 
-Vite provides a fast development server and efficient production build for the frontend.
+Vite provides a fast development server and efficient production builds for the frontend.
 
 ## FastAPI
 
@@ -298,7 +343,7 @@ It also provides:
 
 PyMuPDF provides efficient PDF text and page extraction.
 
-Block-level information allows the application to reconstruct a more natural reading order rather than relying only on the PDF's internal object order.
+Block-level information allows the application to reconstruct a more natural reading order instead of relying only on the PDF's internal object order.
 
 ## Tesseract + pytesseract
 
@@ -306,7 +351,7 @@ Scanned documents and photos may not contain machine-readable text.
 
 Tesseract provides a free and open-source OCR engine, while pytesseract provides the Python integration.
 
-## Gemini 3.5 Flash Lite
+## Gemini
 
 Gemini is used for:
 
@@ -315,7 +360,7 @@ Gemini is used for:
 - Document Q&A
 - Plain-language explanations
 
-Gemini 3.5 Flash Lite is used in production because it provides a lightweight model suitable for the application's document-processing and AI interaction requirements.
+A hosted LLM is appropriate for this document-understanding task and avoids the unnecessary complexity of training or fine-tuning a model within the project scope.
 
 ## Pydantic
 
@@ -340,7 +385,7 @@ Render hosts the Dockerized FastAPI backend and provides the public API used by 
 # Project Structure
 
 ```text
-doclens/
+doclens-document-intelligence/
 │
 ├── frontend/
 │   ├── src/
@@ -356,9 +401,6 @@ doclens/
 │   ├── app/
 │   │   ├── main.py
 │   │   ├── api/
-│   │   │   ├── upload.py
-│   │   │   ├── ask.py
-│   │   │   └── summarize.py
 │   │   ├── services/
 │   │   ├── schemas/
 │   │   └── utils/
@@ -367,6 +409,7 @@ doclens/
 │   └── Dockerfile
 │
 ├── sample_documents/
+├── screenshots/
 ├── docker-compose.yml
 ├── .env.example
 ├── .gitignore
@@ -410,7 +453,7 @@ Pages with insufficient extractable text can be treated as scanned pages and sen
 
 Standalone images are processed using Tesseract OCR.
 
-For scanned PDFs, only pages that require OCR are rendered and processed rather than unnecessarily OCR-ing every page.
+For scanned PDFs, only pages that require OCR are rendered and processed instead of unnecessarily OCR-ing every page.
 
 The extraction method is reported as:
 
@@ -432,8 +475,6 @@ Statistics such as:
 - Estimated reading time
 
 are computed locally rather than being generated by the AI model.
-
-The estimated reading time uses a fixed words-per-minute assumption configured within the application.
 
 ---
 
@@ -475,75 +516,6 @@ the application treats this as document content rather than an instruction to fo
 
 The same principle is applied to document Q&A.
 
-This helps prevent instructions embedded inside uploaded documents from being interpreted as application-level instructions.
-
----
-
-# Ask Your Document
-
-The Ask Document feature uses lightweight lexical retrieval rather than a vector database.
-
-The process is:
-
-```text
-Document
-   ↓
-Split into chunks
-   ↓
-Tokenize question
-   ↓
-Remove stopwords
-   ↓
-Score chunks by term overlap
-   ↓
-Select relevant chunks
-   ↓
-Send selected context to Gemini
-   ↓
-Generate grounded answer
-```
-
-The document is split into overlapping chunks.
-
-The question is tokenized and stopwords are removed.
-
-Each chunk is scored based on term overlap with the question.
-
-The most relevant chunks are selected and passed to Gemini as context.
-
-The model is instructed to answer only from that context.
-
-If the document does not contain enough information, the application is designed to return an appropriate insufficient-information response instead of inventing an answer.
-
-This approach is intentionally simple and appropriate for an MVP handling one document at a time.
-
-If the system later needs to support many large documents, lexical retrieval can be replaced with embedding-based semantic retrieval.
-
----
-
-# Explain Simply
-
-The Explain Simply feature sends the extracted document content to Gemini with instructions to explain the material in plain language.
-
-The goal is to make technical or complex documents understandable to users without requiring prior knowledge of the subject.
-
----
-
-# AI Provider Architecture
-
-AI functionality is isolated inside the AI service layer.
-
-The provider abstraction allows the application to support different AI implementations without requiring changes throughout the rest of the application.
-
-The current implementation supports:
-
-- Gemini provider
-- Mock provider
-
-The mock provider allows the application to run without a Gemini API key.
-
-This separation also makes the AI layer easier to replace or extend in the future.
-
 ---
 
 # Local Setup
@@ -553,9 +525,21 @@ This separation also makes the AI layer easier to replace or extend in the futur
 - Python 3.11+
 - Node.js 18+
 - npm
-- Tesseract OCR
+- Tesseract OCR if running the backend outside Docker
 
-If running the backend outside Docker, install Tesseract separately.
+### Tesseract Installation
+
+macOS:
+
+```bash
+brew install tesseract
+```
+
+Ubuntu/Debian:
+
+```bash
+sudo apt install tesseract-ocr
+```
 
 ---
 
@@ -563,14 +547,10 @@ If running the backend outside Docker, install Tesseract separately.
 
 ```bash
 git clone https://github.com/Alisha-lal/doclens-document-intelligence.git
-cd doclens
+cd doclens-document-intelligence
 ```
 
----
-
-## Environment Configuration
-
-Copy the example environment file:
+Copy the environment example:
 
 ```bash
 cp .env.example .env
@@ -578,30 +558,20 @@ cp .env.example .env
 
 Then configure the required values.
 
-**Never commit the actual `.env` file or API keys.**
-
 ---
 
 # Environment Variables
 
-## Backend
-
 | Variable | Used By | Description |
 |---|---|---|
-| `GEMINI_API_KEY` | Backend | Gemini API key |
-| `GEMINI_MODEL` | Backend | Gemini model used for AI processing; production uses `gemini-3.5-flash-lite` |
-| `FRONTEND_URL` | Backend | Comma-separated allowed frontend origins |
-| `MAX_FILE_SIZE_MB` | Backend | Maximum upload size in MB |
-| `REQUEST_TIMEOUT_SECONDS` | Backend | Backend request timeout |
+| `GEMINI_API_KEY` | Backend | Gemini API key. Leave empty to use mock mode. |
+| `GEMINI_MODEL` | Backend | Gemini model used for analysis. |
+| `FRONTEND_URL` | Backend | Allowed frontend CORS origin(s). |
+| `MAX_FILE_SIZE_MB` | Backend | Maximum upload size. |
+| `VITE_API_URL` | Frontend | Backend base URL. |
+| `VITE_MAX_FILE_SIZE_MB` | Frontend | Frontend upload-size validation limit. |
 
-## Frontend
-
-| Variable | Used By | Description |
-|---|---|---|
-| `VITE_API_URL` | Frontend | Base URL of the backend API |
-| `VITE_MAX_FILE_SIZE_MB` | Frontend | Client-side upload size limit |
-
-Actual secrets and API keys are not stored in the repository.
+Never commit a real `.env` file or API key to GitHub.
 
 ---
 
@@ -613,16 +583,16 @@ npm install
 npm run dev
 ```
 
-The development server normally runs at:
+The frontend runs at:
 
 ```text
 http://localhost:5173
 ```
 
-The backend URL is configured through:
+Set the backend URL through:
 
 ```text
-VITE_API_URL
+VITE_API_URL=http://localhost:8000
 ```
 
 ---
@@ -634,13 +604,13 @@ cd backend
 python -m venv venv
 ```
 
-## Windows
+Windows:
 
-```powershell
-.\venv\Scripts\Activate.ps1
+```bash
+venv\Scripts\activate
 ```
 
-## macOS/Linux
+macOS/Linux:
 
 ```bash
 source venv/bin/activate
@@ -664,7 +634,7 @@ The backend runs at:
 http://localhost:8000
 ```
 
-Interactive API documentation is available at:
+Interactive API documentation:
 
 ```text
 http://localhost:8000/docs
@@ -693,7 +663,7 @@ The frontend is intentionally not containerized because it is a static Vite appl
 | GET | `/api/health` | Backend health check |
 | POST | `/api/documents/analyze` | Upload, extract, and analyze a document |
 | POST | `/api/documents/ask` | Ask a question about an analyzed document |
-| POST | `/api/documents/explain` | Generate a simple explanation |
+| POST | `/api/documents/explain` | Generate a plain-language explanation |
 
 FastAPI also provides interactive OpenAPI/Swagger documentation at:
 
@@ -725,7 +695,7 @@ The test suite covers areas including:
 - Health checks
 - Error handling
 
-The test suite is intended to demonstrate engineering discipline while keeping the project scope appropriate for the assessment.
+The test suite is intended to demonstrate engineering discipline while keeping the project scope appropriate for the MVP.
 
 ---
 
@@ -735,26 +705,17 @@ The test suite is intended to demonstrate engineering discipline while keeping t
 
 The frontend is deployed as a Vite application.
 
-### Configuration
+Production frontend:
 
 ```text
-Framework: Vite
-Root Directory: frontend
-Build Command: npm run build
-Output Directory: dist
-```
-
-### Production Frontend
-
 https://doclens-document-intelligence.vercel.app
+```
 
 The frontend uses:
 
 ```text
 VITE_API_URL=https://doclens-backend-721e.onrender.com
 ```
-
----
 
 ## Backend — Render
 
@@ -766,11 +727,13 @@ The Docker image:
 2. Installs Tesseract OCR.
 3. Installs Python dependencies.
 4. Copies the FastAPI application.
-5. Starts Uvicorn on port `8000`.
+5. Starts Uvicorn.
 
-### Production Backend
+Production backend:
 
+```text
 https://doclens-backend-721e.onrender.com
+```
 
 The backend uses environment variables for:
 
@@ -778,61 +741,39 @@ The backend uses environment variables for:
 - Gemini model configuration
 - Frontend CORS origin
 - Upload limits
-- Request timeout
+- Request configuration
 
 Secrets are configured in the deployment platform rather than stored in the GitHub repository.
-
----
-
-## CORS Configuration
-
-The backend uses FastAPI's CORS middleware and allows the deployed frontend origin.
-
-Production communication is configured between:
-
-```text
-Frontend:
-https://doclens-document-intelligence.vercel.app
-
-Backend:
-https://doclens-backend-721e.onrender.com
-```
-
-The backend supports the required HTTP methods and headers for frontend API requests, including browser preflight requests.
-
----
-
-## Backend Monitoring
-
-The production backend health endpoint is monitored using UptimeRobot:
-
-```text
-https://doclens-backend-721e.onrender.com/api/health
-```
-
-The health endpoint is periodically checked to monitor backend availability and help keep the deployed service responsive.
 
 ---
 
 # Deployment Environment
 
 ```text
-Frontend
-Vercel
-   │
-   │ HTTPS
-   ▼
-Backend
-Render
-   │
-   │ Gemini API
-   ▼
-Google Gemini
+                  ┌──────────────────┐
+                  │     Vercel       │
+                  │ React + Vite UI  │
+                  └────────┬─────────┘
+                           │
+                           │ HTTPS
+                           ▼
+                  ┌──────────────────┐
+                  │      Render      │
+                  │ FastAPI + Docker │
+                  │    + Tesseract   │
+                  └────────┬─────────┘
+                           │
+                           │ API
+                           ▼
+                  ┌──────────────────┐
+                  │  Google Gemini   │
+                  │       AI         │
+                  └──────────────────┘
 ```
 
 The production frontend communicates with the production backend through HTTPS.
 
-CORS is configured using the frontend's production domain.
+CORS is configured using the deployed frontend origin.
 
 ---
 
@@ -841,12 +782,12 @@ CORS is configured using the frontend's production domain.
 - Documents are stored temporarily in memory rather than persistent storage.
 - Extracted content is not retained permanently.
 - Ask Document uses lexical retrieval rather than semantic/vector search.
-- Very large documents are truncated to a fixed character budget before AI analysis.
+- Very large documents are limited by the application's configured AI input budget.
 - OCR quality depends on scan/image quality.
 - A single-process in-memory backend does not provide shared state across multiple backend replicas.
-- No user authentication or account system is implemented because it was outside the assignment scope.
+- No user authentication or account system is implemented because it is outside the MVP scope.
 - There is no persistent document history.
-- The backend is hosted on a free-tier service and may experience cold starts after periods of inactivity.
+- Free-tier hosting may introduce cold starts after periods of inactivity.
 
 ---
 
@@ -863,7 +804,6 @@ Potential future improvements include:
 - Multi-page image document processing
 - Improved OCR preprocessing
 - Background processing for very large documents
-- More advanced semantic document retrieval
 - Production-grade always-on backend infrastructure
 
 ---
@@ -872,19 +812,15 @@ Potential future improvements include:
 
 ## Why no database?
 
-The assignment does not require persistent accounts or document history.
+The MVP does not require persistent accounts or document history.
 
-Temporary in-memory storage keeps the MVP simple and reduces unnecessary infrastructure.
-
----
+Temporary in-memory storage keeps the application simple and reduces unnecessary infrastructure.
 
 ## Why no vector database?
 
 The MVP handles one uploaded document at a time.
 
 Lightweight lexical retrieval is sufficient for this scope and avoids unnecessary embedding infrastructure.
-
----
 
 ## Why FastAPI?
 
@@ -897,27 +833,15 @@ PDF processing, OCR, and AI orchestration have strong Python libraries, includin
 
 FastAPI provides a clean API layer around these components.
 
----
-
 ## Why Gemini?
 
 The task focuses on document understanding rather than model training.
 
 A capable hosted LLM provides practical summarization and question-answering capabilities within the project scope.
 
----
-
-## Why Gemini 3.5 Flash Lite?
-
-The production deployment uses Gemini 3.5 Flash Lite as a lightweight model suitable for document summarization, structured analysis, and document Q&A while keeping the application responsive and practical for an MVP.
-
----
-
 ## Why PyMuPDF?
 
 PyMuPDF provides efficient PDF text and page extraction with relatively few dependencies.
-
----
 
 ## Why Tesseract?
 
@@ -925,21 +849,15 @@ Scanned documents require OCR.
 
 Tesseract is free, open-source, and integrates cleanly with Python through pytesseract.
 
----
-
 ## Why Docker?
 
 Tesseract is a system dependency rather than a Python package.
 
 Docker provides a reproducible backend environment containing both the Python dependencies and OCR engine.
 
----
-
 ## Why Vercel?
 
 The React/Vite frontend is a static application, making Vercel a simple deployment option.
-
----
 
 ## Why Render?
 
@@ -967,6 +885,24 @@ The Gemini API key is stored only in the backend deployment environment and is n
 
 ---
 
+# Project Approach
+
+DocLens was built with a clear separation between deterministic document processing and AI-driven analysis.
+
+Uploads are validated and parsed with PyMuPDF for digital text, with Tesseract OCR as an automatic fallback for scanned documents. This allows the same workflow to handle both machine-readable and scanned content.
+
+Document statistics such as page count, word count, character count, and estimated reading time are calculated locally rather than delegated to the LLM, keeping those results deterministic.
+
+For AI analysis, extracted text is sent to Gemini using a structured prompt, and responses are validated with Pydantic schemas to provide consistent output.
+
+Document Q&A uses a lightweight retrieval step. The document is chunked, relevant chunks are selected lexically, and only the selected context is passed to Gemini. The prompt explicitly treats document content as untrusted data and instructs the model to answer from the provided context.
+
+The frontend uses React and Vite, while the backend uses FastAPI and Docker to package the OCR dependency. Vercel hosts the frontend and Render hosts the backend.
+
+The project prioritizes clean architecture, grounded responses, responsive UX, error handling, and practical engineering trade-offs appropriate for an MVP.
+
+---
+
 # Submission Information
 
 ## Working Application
@@ -983,20 +919,7 @@ https://github.com/Alisha-lal/doclens-document-intelligence
 main
 ```
 
-The repository contains the application source code, README documentation, configuration examples, tests, and deployment configuration required to reproduce the project.
-
----
-
-# Brief Write-up of Approach
-
-DocLens was built with a clear separation between deterministic processing and AI-driven analysis. Uploads are validated and parsed with PyMuPDF for digital text, with Tesseract OCR as an automatic fallback for scanned documents — ensuring the system handles both content types without manual intervention. Basic statistics (page count, word count, reading time) are computed locally rather than delegated to the LLM, keeping those results fast, deterministic, and cost-free.
-
-For AI analysis, extracted text is sent to Gemini with a structured prompt, and responses are validated against Pydantic schemas to guarantee consistent, parseable output rather than relying on free-form text.
-
-Document Q&A uses a lightweight retrieval step: the document is chunked with overlap, relevant chunks are selected lexically, and only that grounded context is passed to Gemini — with explicit instructions to treat the document as untrusted data and answer solely from provided context. This reduces hallucination risk and avoids the cost/complexity of a full vector database for an MVP.
-
-The stack (React/Vite frontend, FastAPI backend, Dockerized with Tesseract) was chosen for fast iteration and reproducible deployment, with Vercel/Render handling hosting — prioritizing pragmatic, production-appropriate trade-offs over premature optimization.
-
+The repository contains the application source code, documentation, configuration examples, tests, screenshots, and deployment configuration required to reproduce the project.
 
 ---
 
