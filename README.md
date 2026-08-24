@@ -254,7 +254,7 @@ Follow-up actions such as **Ask Document** and **Explain Simply** reuse the alre
 
 ## AI
 
-- Gemini
+- Gemini 3.5 Flash Lite
 - Official `google-genai` Python SDK
 - Pydantic structured output
 
@@ -306,7 +306,7 @@ Scanned documents and photos may not contain machine-readable text.
 
 Tesseract provides a free and open-source OCR engine, while pytesseract provides the Python integration.
 
-## Gemini
+## Gemini 3.5 Flash Lite
 
 Gemini is used for:
 
@@ -315,7 +315,7 @@ Gemini is used for:
 - Document Q&A
 - Plain-language explanations
 
-A hosted LLM is appropriate for this document-understanding task and avoids the unnecessary complexity of training or fine-tuning a model within the project scope.
+Gemini 3.5 Flash Lite is used in production because it provides a lightweight model suitable for the application's document-processing and AI interaction requirements.
 
 ## Pydantic
 
@@ -589,7 +589,7 @@ Then configure the required values.
 | Variable | Used By | Description |
 |---|---|---|
 | `GEMINI_API_KEY` | Backend | Gemini API key |
-| `GEMINI_MODEL` | Backend | Gemini model used for AI processing |
+| `GEMINI_MODEL` | Backend | Gemini model used for AI processing; production uses `gemini-3.5-flash-lite` |
 | `FRONTEND_URL` | Backend | Comma-separated allowed frontend origins |
 | `MAX_FILE_SIZE_MB` | Backend | Maximum upload size in MB |
 | `REQUEST_TIMEOUT_SECONDS` | Backend | Backend request timeout |
@@ -784,6 +784,36 @@ Secrets are configured in the deployment platform rather than stored in the GitH
 
 ---
 
+## CORS Configuration
+
+The backend uses FastAPI's CORS middleware and allows the deployed frontend origin.
+
+Production communication is configured between:
+
+```text
+Frontend:
+https://doclens-document-intelligence.vercel.app
+
+Backend:
+https://doclens-backend-721e.onrender.com
+```
+
+The backend supports the required HTTP methods and headers for frontend API requests, including browser preflight requests.
+
+---
+
+## Backend Monitoring
+
+The production backend health endpoint is monitored using UptimeRobot:
+
+```text
+https://doclens-backend-721e.onrender.com/api/health
+```
+
+The health endpoint is periodically checked to monitor backend availability and help keep the deployed service responsive.
+
+---
+
 # Deployment Environment
 
 ```text
@@ -816,6 +846,7 @@ CORS is configured using the frontend's production domain.
 - A single-process in-memory backend does not provide shared state across multiple backend replicas.
 - No user authentication or account system is implemented because it was outside the assignment scope.
 - There is no persistent document history.
+- The backend is hosted on a free-tier service and may experience cold starts after periods of inactivity.
 
 ---
 
@@ -833,6 +864,7 @@ Potential future improvements include:
 - Improved OCR preprocessing
 - Background processing for very large documents
 - More advanced semantic document retrieval
+- Production-grade always-on backend infrastructure
 
 ---
 
@@ -872,6 +904,12 @@ FastAPI provides a clean API layer around these components.
 The task focuses on document understanding rather than model training.
 
 A capable hosted LLM provides practical summarization and question-answering capabilities within the project scope.
+
+---
+
+## Why Gemini 3.5 Flash Lite?
+
+The production deployment uses Gemini 3.5 Flash Lite as a lightweight model suitable for document summarization, structured analysis, and document Q&A while keeping the application responsive and practical for an MVP.
 
 ---
 
@@ -949,13 +987,13 @@ The repository contains the application source code, README documentation, confi
 
 ---
 
-# Project Approach — Submission Write-up
+# Brief Write-up of Approach
 
-DocLens is an MVP that turns uploaded PDFs and images into a grounded, structured understanding of their content. The pipeline uses PyMuPDF for PDF extraction and automatically falls back to Tesseract OCR for scanned pages and images. Extracted text is normalized and analyzed by Gemini to produce short, medium, and long summaries, key points, main ideas, topics, entities, and improvement suggestions.
+DocLens is an AI-powered document intelligence MVP that converts uploaded PDFs and images into a grounded, structured understanding of their content. The pipeline uses PyMuPDF for PDF extraction and automatically falls back to Tesseract OCR for scanned pages and images. Extracted text is normalized, document statistics are calculated locally, and Gemini generates summaries, key points, insights, topics, entities, and improvement suggestions.
 
-For follow-up questions, the system uses lightweight lexical chunk retrieval to select relevant document sections before sending them to Gemini. This avoids unnecessary vector-database infrastructure while remaining appropriate for a single-document MVP. Pydantic validates structured AI responses, while prompt instructions ensure document content is treated as untrusted data.
+For document Q&A, the system splits the extracted content into overlapping chunks and uses lightweight lexical retrieval to select relevant sections before sending grounded context to Gemini. This avoids unnecessary vector-database infrastructure while remaining suitable for a single-document MVP. Pydantic validates structured AI responses, and prompt instructions treat uploaded content as untrusted data.
 
-The frontend is built with React and Vite, while the backend uses FastAPI and Docker to package the OCR dependency. The frontend is deployed on Vercel and the backend on Render. The project prioritizes clean architecture, grounded responses, responsive UX, error handling, and practical engineering trade-offs within the assignment scope.
+The frontend uses React and Vite, while the backend uses FastAPI and Docker to package the OCR dependency. The frontend is deployed on Vercel and the backend on Render. The implementation prioritizes reliable document extraction, OCR support, grounded AI responses, responsive UX, validation, and practical engineering trade-offs within the assignment scope.
 
 ---
 
