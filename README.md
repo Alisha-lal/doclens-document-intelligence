@@ -996,6 +996,8 @@ For AI analysis, extracted text is sent to Gemini with a structured prompt, and 
 Document Q&A uses a lightweight retrieval step: the document is chunked with overlap, relevant chunks are selected lexically, and only that grounded context is passed to Gemini — with explicit instructions to treat the document as untrusted data and answer solely from provided context. This reduces hallucination risk and avoids the cost/complexity of a full vector database for an MVP.
 
 The stack (React/Vite frontend, FastAPI backend, Dockerized with Tesseract) was chosen for fast iteration and reproducible deployment, with Vercel/Render handling hosting — prioritizing pragmatic, production-appropriate trade-offs over premature optimization.
+
+
 ---
 
 # Author
