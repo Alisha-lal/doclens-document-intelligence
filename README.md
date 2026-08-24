@@ -989,12 +989,13 @@ The repository contains the application source code, README documentation, confi
 
 # Brief Write-up of Approach
 
-DocLens is an AI-powered document intelligence MVP that converts uploaded PDFs and images into a grounded, structured understanding of their content. The pipeline uses PyMuPDF for PDF extraction and automatically falls back to Tesseract OCR for scanned pages and images. Extracted text is normalized, document statistics are calculated locally, and Gemini generates summaries, key points, insights, topics, entities, and improvement suggestions.
+DocLens was built with a clear separation between deterministic processing and AI-driven analysis. Uploads are validated and parsed with PyMuPDF for digital text, with Tesseract OCR as an automatic fallback for scanned documents — ensuring the system handles both content types without manual intervention. Basic statistics (page count, word count, reading time) are computed locally rather than delegated to the LLM, keeping those results fast, deterministic, and cost-free.
 
-For document Q&A, the system splits the extracted content into overlapping chunks and uses lightweight lexical retrieval to select relevant sections before sending grounded context to Gemini. This avoids unnecessary vector-database infrastructure while remaining suitable for a single-document MVP. Pydantic validates structured AI responses, and prompt instructions treat uploaded content as untrusted data.
+For AI analysis, extracted text is sent to Gemini with a structured prompt, and responses are validated against Pydantic schemas to guarantee consistent, parseable output rather than relying on free-form text.
 
-The frontend uses React and Vite, while the backend uses FastAPI and Docker to package the OCR dependency. The frontend is deployed on Vercel and the backend on Render. The implementation prioritizes reliable document extraction, OCR support, grounded AI responses, responsive UX, validation, and practical engineering trade-offs within the assignment scope.
+Document Q&A uses a lightweight retrieval step: the document is chunked with overlap, relevant chunks are selected lexically, and only that grounded context is passed to Gemini — with explicit instructions to treat the document as untrusted data and answer solely from provided context. This reduces hallucination risk and avoids the cost/complexity of a full vector database for an MVP.
 
+The stack (React/Vite frontend, FastAPI backend, Dockerized with Tesseract) was chosen for fast iteration and reproducible deployment, with Vercel/Render handling hosting — prioritizing pragmatic, production-appropriate trade-offs over premature optimization.
 ---
 
 # Author
